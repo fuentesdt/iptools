@@ -11,3 +11,6 @@ Debug
 docker run --entrypoint=/bin/bash --rm -it -u $(id -u):$(id -g) mistrgepm
 
 
+Usage
+=====
+docker run --entrypoint=/opt/itk/DicomSeriesReadImageWrite2  --rm -it --user $(id -u):$(id -g) -v $PWD/dicomdir/:/data/  -v $PWD:/out iptools:latest /data/ /out/image.nii.gz

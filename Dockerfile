@@ -54,17 +54,28 @@ RUN cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=ON -DITK_DIR=/usr/li
 RUN make 
 RUN mkdir /data
 RUN mkdir /out
-## # install mitk
-## RUN mkdir /opt/mitk
-## WORKDIR /opt/mitk
+
+# install mitk
+RUN mkdir /opt/mitk
+WORKDIR /opt/mitk
+
+RUN git clone https://phabricator.mitk.org/source/mitk.git MITK
+WORKDIR /opt/mitk/MITK
+RUN git checkout  v2023.04.2  -b  v2023.04.2
+
+RUN mkdir /opt/cmake /opt/cmake/install
+WORKDIR /opt/cmake
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.2/cmake-3.20.2.tar.gz
+RUN tar -zxvf cmake-3.20.2.tar.gz
+WORKDIR /opt/cmake/cmake-3.20.2
+RUN ./bootstrap --prefix=/opt/cmake/install
+RUN make 
+RUN make install
 ## 
-## RUN git clone https://phabricator.mitk.org/source/mitk.git MITK
-## WORKDIR /opt/mitk/MITK
-## RUN git checkout  v2018.04.2  -b  v2018.04.2
-## WORKDIR /opt/mitk
-## RUN mkdir build install
-## WORKDIR /opt/mitk/build
-## RUN cmake -DMITK_USE_BLUEBERRY=OFF -DMITK_USE_CTK=OFF -DMITK_USE_Qt5=OFF ../MITK
-## ## cmake -DMITK_USE_Qt5=OFFITK_DIR:PATH=/opt/ITK-release ../MITK
-
-
+## 
+WORKDIR /opt/mitk
+RUN mkdir build install
+WORKDIR /opt/mitk/build
+RUN /opt/cmake/install/bin/cmake -DMITK_USE_BLUEBERRY=OFF -DMITK_USE_CTK=OFF -DMITK_USE_Qt5=OFF -DCMAKE_INSTALL_PREFIX=/opt/mitk/install ../MITK
+RUN make -j6
+## RUN /opt/cmake/install/bin/cmake -DMITK_USE_BLUEBERRY=OFF -DMITK_USE_CTK=OFF -DMITK_USE_Qt5=OFF -DITK_DIR=/usr/lib/cmake/ITK-4.13 -DCMAKE_INSTALL_PREFIX=/opt/mitk/install ../MITK
