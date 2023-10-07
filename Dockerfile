@@ -72,10 +72,16 @@ RUN ./bootstrap --prefix=/opt/cmake/install
 RUN make 
 RUN make install
 ## 
-## 
 WORKDIR /opt/mitk
 RUN mkdir build install
 WORKDIR /opt/mitk/build
 RUN /opt/cmake/install/bin/cmake -DMITK_USE_BLUEBERRY=OFF -DMITK_USE_CTK=OFF -DMITK_USE_Qt5=OFF -DCMAKE_INSTALL_PREFIX=/opt/mitk/install ../MITK
 RUN make -j6
-## RUN /opt/cmake/install/bin/cmake -DMITK_USE_BLUEBERRY=OFF -DMITK_USE_CTK=OFF -DMITK_USE_Qt5=OFF -DITK_DIR=/usr/lib/cmake/ITK-4.13 -DCMAKE_INSTALL_PREFIX=/opt/mitk/install ../MITK
+##  denoising code
+RUN apt-get install -y exuberant-ctags
+WORKDIR /opt/mitk/ImageDenoising
+ADD ./ImageDenoising/ /opt/mitk/ImageDenoising
+RUN ctags -R ../MITK/
+RUN cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=ON  -DITK_DIR=../build/ep/lib/cmake/ITK-5.2/
+RUN make
+
