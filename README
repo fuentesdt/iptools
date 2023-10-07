@@ -8,7 +8,7 @@ docker build -t iptools .
 
 Debug
 =====
-docker run --entrypoint=/bin/bash --rm -it -u $(id -u):$(id -g) mistrgepm
+docker run --entrypoint=/bin/bash --rm -it -u $(id -u):$(id -g) iptools
 
 
 Usage
