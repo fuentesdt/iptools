@@ -17,3 +17,12 @@ docker run --entrypoint=/opt/itk/DicomSeriesReadImageWrite2  --rm -it --user $(i
 docker run --entrypoint=/opt/mitk/ImageDenoising/TotalVariationDenoisingImage  --rm -it --user $(id -u):$(id -g) -v $PWD/:/data/  -v $PWD:/out iptools:latest /data/art.nii.gz /out/art.denoise.nii.gz
 
 
+dockerhub
+=========
+
+docker login --username=fuentesdt
+
+docker tag f3dca8cda305 fuentesdt/iptools:latest
+
+docker push fuentesdt/iptools
+
